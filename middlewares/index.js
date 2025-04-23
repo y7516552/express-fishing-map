@@ -5,7 +5,7 @@ const UsersModel = require('../models/userModel');
 const { verifyToken } = require('../utils/index');
 
 // token 驗證
-export const isAuth = async (req, _res, next) => {
+const isAuth = async (req, _res, next) => {
     /**
      * #swagger.security = [{ "bearerAuth": [] }]
      * #swagger.responses[403] = {
@@ -34,7 +34,7 @@ export const isAuth = async (req, _res, next) => {
 };
 
 // TODO:實作管理員權限
-export const isAdmin = async (req, _res, next) => {
+const isAdmin = async (req, _res, next) => {
     /**
      * #swagger.security = [{ "bearerAuth": [] }]
      * #swagger.responses[403] = {
@@ -65,7 +65,7 @@ export const isAdmin = async (req, _res, next) => {
         }
 };
 
-export const checkRequestBodyValidator = (req, _res, next) => {
+const checkRequestBodyValidator = (req, _res, next) => {
     try {
         for (let [key, value] of Object.entries(req.body)) {
             if (value === undefined || value === null) {
@@ -116,7 +116,7 @@ export const checkRequestBodyValidator = (req, _res, next) => {
     }
 };
 
-// export const checkOrder = async (req, _res, next) => {
+// const checkOrder = async (req, _res, next) => {
 //     try {
 //         const { roomId, checkInDate, checkOutDate, peopleNum } = req.body;
 
@@ -150,3 +150,10 @@ export const checkRequestBodyValidator = (req, _res, next) => {
 //         next(error);
 //     }
 // };
+
+
+module.exports = {
+    isAuth,
+    isAdmin,
+    checkRequestBodyValidator,
+}

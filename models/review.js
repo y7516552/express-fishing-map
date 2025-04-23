@@ -1,7 +1,13 @@
 const { Schema, model } = require("mongoose");
 const validator = require('validator');
+const likeSchema = require('./schema/like')
 
 const reviewSchema = new Schema({
+    fishingSpotId: {
+        type: Schema.Types.ObjectId,
+        ref: 'fishingSpot',
+        required: [true, 'fishingSpotId 未填寫']
+    },
     title: {
         type: String,
         required: [true, 'title 未填寫']
@@ -41,8 +47,17 @@ const reviewSchema = new Schema({
         ref: 'user',
         required: [true, 'authorId 未填寫']
     },
-    catch:{
+    catchs:{
         type:[{ type : Schema.Types.ObjectId, ref: 'Species' }]
+    },
+    likes:[likeSchema],
+    likesCounts:{
+        type: Number,
+        default: 0
+    },
+    rating:{
+        type: Number,
+        default: 0
     }
 })
 

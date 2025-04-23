@@ -2,16 +2,17 @@
 const { Schema, model } = require("mongoose");
 const validator = require('validator');
 
-const locationSchema = new mongoose.Schema({
-    name: String,
-    coordinates: {
-      type: { type: String, default: 'Point' }, // Set the type to 'Point' by default
-      coordinates: { type: [Number], required: true } // Array containing longitude and latitude values
-    }
+const locationSchema = new Schema({
+    type: { 
+      type: String, 
+      default: 'Point' ,
+      required: true
+    }, // Set the type to 'Point' by default
+    coordinates: { type: [Number], index: "2dsphere", required: true } // Array containing longitude and latitude values
   });
 
 
-const fishingSpotSchema = new Schema<IRoom>(
+const fishingSpotSchema = new Schema(
     {
         name: {
             type: String,
@@ -55,7 +56,7 @@ const fishingSpotSchema = new Schema<IRoom>(
         reviews:{
             type:[{ type : Schema.Types.ObjectId, ref: 'Reviews' }]
         },
-        locations: [locationSchema] // Array field containing objects with name and coordinates
+        locations: locationSchema // Array field containing objects with name and coordinates
     },
     {
         versionKey: false,
