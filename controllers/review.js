@@ -1,5 +1,6 @@
 const createHttpError = require('http-errors');
 const ReviewModel = require ('../models/review');
+const FishingSpotModel = require('../models/fishingSpot')
 
 const getReviewList = async (_req, res, next) => {
     try {
@@ -7,6 +8,12 @@ const getReviewList = async (_req, res, next) => {
             status: 1
         }).populate({
             path: 'fishingSpotId'
+        }).populate({
+            path: 'authorId',
+            select: 'name avatarUrl',
+        }).populate({
+            path: 'catchs',
+            select: 'CommonName imageUrl fishDBUrl',
         });
 
         res.send({
@@ -51,6 +58,15 @@ const createOneReview = async (req, res, next) => {
             rating
         } = req.body;
 
+        const fishingSpot = await FishingSpotModel.findOne({
+            _id: fishingSpotId,
+            status: 1
+        })
+        
+        if (!fishingSpot) {
+            throw createHttpError(404, '此釣點不存在');
+        }
+
         const result = await ReviewModel.create({
             fishingSpotId,
             title,
@@ -61,6 +77,18 @@ const createOneReview = async (req, res, next) => {
             catchs,
             rating
         });
+
+        fishingSpot.reviews.push(result._id)
+
+        await FishingSpotModel.findOneAndUpdate(
+            {
+                _id: fishingSpotId,
+            },
+            {
+                reviews:fishingSpot.reviews
+            }
+        )
+
 
         await result.populate({
             path: 'fishingSpotId'
@@ -159,10 +187,11 @@ const likeReviewById = async (req, res, next) => {
 
 const deleteReviewById = async (req, res, next) => {
     try {
+
         const result = await ReviewModel.findByIdAndUpdate(
             req.params.id,
             {
-                status: -1
+                status: 0
             },
             {
                 new: true,
@@ -171,9 +200,30 @@ const deleteReviewById = async (req, res, next) => {
         ).populate({
             path: 'fishingSpotId'
         });
+
         if (!result) {
             throw createHttpError(404, '此評論不存在');
         }
+
+        // const fishingSpot = await FishingSpotModel.findOne({
+        //     _id: result.fishingSpotId,
+        //     status: 1
+        // })
+        
+        // if (!fishingSpot) {
+        //     throw createHttpError(404, '此釣點不存在');
+        // }
+
+        // fishingSpot.reviews =  fishingSpot.reviews.filter(item => item !== result._id)
+
+        // await FishingSpotModel.findOneAndUpdate(
+        //     {
+        //         _id: result.fishingSpotId,
+        //     },
+        //     {
+        //         reviews:fishingSpot.reviews
+        //     }
+        // )
 
         res.send({
             status: true,

@@ -48,13 +48,21 @@ const fishingSpotSchema = new Schema(
             type: Number,
             default: 1
         },
+        type:{
+            type: String,
+            required: [true, 'type 未填寫']
+        },
+        fishingAllowed:{
+            type:Boolean,
+            default: true
+        },
         authorId: {
             type: Schema.Types.ObjectId,
-            ref: 'user',
+            ref: 'Users',
             required: [true, 'authorId 未填寫']
         },
         reviews:{
-            type:[{ type : Schema.Types.ObjectId, ref: 'Reviews' }]
+            type:[{ type : Schema.Types.ObjectId, ref: 'reviews' }]
         },
         locations: locationSchema // Array field containing objects with name and coordinates
     },

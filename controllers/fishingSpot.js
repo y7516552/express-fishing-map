@@ -1,11 +1,28 @@
 const createHttpError = require('http-errors');
 const FishingSpotModel = require ('../models/fishingSpot');
+const ReviewModel = require ('../models/review');
 
 const getFishingSpotList = async (_req, res, next) => {
     try {
         const result = await FishingSpotModel.find({
             status: 1
-        })
+        }).populate({
+            path: 'authorId',
+            select: 'name avatarUrl',
+        }).populate({
+            path: 'reviews',
+            match: { status: { $eq: 1 }},
+            populate: [
+                { 
+                    path: 'authorId',
+                    select: 'name avatarUrl', 
+                },
+                {
+                    path: 'catchs',
+                    select: 'CommonName imageUrl fishDBUrl',
+                }
+            ]
+        });
 
         res.send({
             status: true,
@@ -21,7 +38,11 @@ const getFishingSpotById = async (req, res, next) => {
         const result = await FishingSpotModel.findOne({
             _id: req.params.id,
             status: 1
-        })
+        }).populate({
+            path: 'reviews',
+            match: { status: { $eq: 1 }},
+        },);
+
         if (!result) {
             throw createHttpError(404, '此釣點不存在');
         }
@@ -42,6 +63,8 @@ const createOneFishingSpot = async (req, res, next) => {
             description,
             imageUrl,
             imageUrlList,
+            type,
+            fishingAllowed,
             locations
         } = req.body;
 
@@ -50,6 +73,8 @@ const createOneFishingSpot = async (req, res, next) => {
             description,
             imageUrl,
             imageUrlList,
+            type,
+            fishingAllowed,
             authorId: req.user?._id,
             locations
         });
@@ -74,6 +99,8 @@ const updateFishingSpotById = async (req, res, next) => {
             description,
             imageUrl,
             imageUrlList,
+            type,
+            fishingAllowed,
             locations
         } = req.body;
 
@@ -87,6 +114,8 @@ const updateFishingSpotById = async (req, res, next) => {
                 imageUrl,
                 imageUrlList,
                 authorId: req.user?._id,
+                type,
+                fishingAllowed,
                 locations
             },
             {

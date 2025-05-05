@@ -41,6 +41,16 @@ const UserSchema = new Schema({
   role:{
     type: String,
     default: 'user',
+  },
+  avatarUrl:{
+    type: String,
+    default: '',
+    validate: {
+        validator(value) {
+            return validator.isURL(value, { protocols: ['https'] });
+        },
+        message: 'avatarUrl 格式不正確'
+    }
   }
 });
 
