@@ -55,7 +55,8 @@ const createOneReview = async (req, res, next) => {
             imageUrl,
             imageUrlList,
             catchs,
-            rating
+            rating,
+            bait
         } = req.body;
 
         const fishingSpot = await FishingSpotModel.findOne({
@@ -75,7 +76,8 @@ const createOneReview = async (req, res, next) => {
             imageUrlList,
             authorId: req.user?._id,
             catchs,
-            rating
+            rating,
+            bait
         });
 
         fishingSpot.reviews.push(result._id)
@@ -113,7 +115,8 @@ const updateReviewById = async (req, res, next) => {
             imageUrlList,
             authorId,
             catchs,
-            rating
+            rating,
+            bait
         } = req.body;
 
         const result = await ReviewModel.findByIdAndUpdate(
@@ -126,7 +129,8 @@ const updateReviewById = async (req, res, next) => {
                 imageUrlList,
                 authorId,
                 catchs,
-                rating
+                rating,
+                bait
             },
             {
                 new: true,

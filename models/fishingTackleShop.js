@@ -1,7 +1,6 @@
 // import itemSchema, { IItem } from './schema/item';
 const { Schema, model } = require("mongoose");
 const validator = require('validator');
-const likeSchema = require('./schema/like')
 
 const locationSchema = new Schema({
     type: { 
@@ -13,8 +12,12 @@ const locationSchema = new Schema({
   });
 
 
-const fishingSpotSchema = new Schema(
+const fishingTackleShopSchema = new Schema(
     {
+        placesId:{
+            type: String,
+            required: [true, 'placesId 未填寫']
+        },
         name: {
             type: String,
             required: [true, 'name 未填寫']
@@ -45,30 +48,23 @@ const fishingSpotSchema = new Schema(
                 }
             }
         ],
+        address: {
+            type: String,
+            required: [true, 'detail 未填寫']
+        },
+        googleMapsUri:{
+            type: String,
+            required: [true, 'googleMapsUri 未填寫'],
+            validate: {
+                validator(value) {
+                    return validator.isURL(value, { protocols: ['https'] });
+                },
+                message: 'googleMapsUri 格式不正確'
+            }
+        },
         status: {
             type: Number,
             default: 1
-        },
-        type:{
-            type: String,
-            required: [true, 'type 未填寫']
-        },
-        fishingAllowed:{
-            type:Boolean,
-            default: true
-        },
-        authorId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Users',
-            required: [true, 'authorId 未填寫']
-        },
-        reviews:{
-            type:[{ type : Schema.Types.ObjectId, ref: 'reviews' }]
-        },
-        likes:[likeSchema],
-        likesCounts:{
-            type: Number,
-            default: 0
         },
         locations: locationSchema // Array field containing objects with name and coordinates
     },
@@ -79,6 +75,6 @@ const fishingSpotSchema = new Schema(
 );
 
 
-const FishingSpotModel = model("FishingSpots", fishingSpotSchema);
+const fishingTackleShopModel = model("fishingTackleShops", fishingTackleShopSchema);
 
-module.exports = FishingSpotModel;
+module.exports = fishingTackleShopModel;

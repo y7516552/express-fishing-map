@@ -4,7 +4,7 @@ const likeSchema = new Schema(
     {
         userId:{
             type: Schema.Types.ObjectId,
-            ref: 'user',
+            ref: 'Users',
         },
         date: {
             type: Date,

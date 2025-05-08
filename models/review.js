@@ -61,7 +61,10 @@ const reviewSchema = new Schema({
         type: Number,
         default: 0
     },
-    
+    bait:{
+        type: String,
+        required: [true, 'bait 未填寫']
+    }
 },{
     versionKey: false,
     timestamps: true

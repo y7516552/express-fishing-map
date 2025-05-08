@@ -32,4 +32,17 @@ router.delete(
     FishingSpotController.deleteFishingSpotById
 );
 
+router.get(
+    '/:id/like',
+    isAuth,
+    FishingSpotController.likeFishingSpotById
+);
+
+
+router.get(
+    '/:id/dislike',
+    isAuth,
+    FishingSpotController.dislikeFishingSpotById
+);
+
 module.exports = router;
