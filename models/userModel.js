@@ -44,7 +44,7 @@ const UserSchema = new Schema({
   },
   avatarUrl:{
     type: String,
-    default: '',
+    default:'https://fastly.picsum.photos/id/1/200/300.jpg?hmac=jH5bDkLr6Tgy3oAg5khKCHeunZMHq0ehBZr6vGifPLY',
     validate: {
         validator(value) {
             return validator.isURL(value, { protocols: ['https'] });

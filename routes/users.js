@@ -32,13 +32,13 @@ router.get(
 );
 
 router.get(
-  '/',
+  '/me',
   isAuth,
   UserController.getInfo
 );
 
 router.put(
-  '/',
+  '/me',
   isAuth,
   UserController.updateInfo
 );
