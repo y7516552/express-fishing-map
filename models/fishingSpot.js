@@ -23,6 +23,28 @@ const fishingSpotSchema = new Schema(
             type: String,
             required: [true, 'description 未填寫']
         },
+        imageUrl: {
+            type: String,
+            required: [true, 'imageUrl 未填寫'],
+            validate: {
+                validator(value) {
+                    return validator.isURL(value, { protocols: ['https'] });
+                },
+                message: 'imageUrl 格式不正確'
+            }
+        },
+        imageUrlList: [
+            {
+                type: String,
+                trim: true,
+                validate: {
+                    validator(value) {
+                        return validator.isURL(value, { protocols: ['https'] });
+                    },
+                    message: 'imageUrlList 格式不正確'
+                }
+            }
+        ],
         status: {
             type: Number,
             default: 1

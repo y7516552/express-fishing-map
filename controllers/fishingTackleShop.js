@@ -40,55 +40,49 @@ const getFishingTackleShopFromGoogle = async (_req, res, next) => {
     try {
             const textQuery ="台中 釣具店"
             let FishingTackleShopList = []
-            let PageToken = ''
             
             for(let i = 0; i < 3; i++){
+                let PageToken = ''
                 const data = await fetchGoogleMap(textQuery,PageToken)
-                FishingTackleShopList.push(data.places)
-                if(data.nextPageToken) PageToken = PageToken
+                FishingTackleShopList=[...FishingTackleShopList,...data.places]
+                if(data.nextPageToken) PageToken = data.nextPageToken
             }
-            console.log(FishingTackleShopList)
-            // {
-            //     "id": "ChIJOzEZnR4baTQRra-1nw-KTZg",
-            //     "types": [
-            //         "restaurant",
-            //         "food",
-            //         "point_of_interest",
-            //         "establishment"
-            //     ],
-            //     "nationalPhoneNumber": "04 2512 0277",
-            //     "formattedAddress": "420台灣台中市豐原區中山路630號",
-            //     "location": {
-            //         "latitude": 24.254593,
-            //         "longitude": 120.713563
-            //     },
-            //     "googleMapsUri": "https://maps.google.com/?cid=10974579666680393645",
-            //     "displayName": {
-            //         "text": "鴻海釣蝦場"
-            //     }
-            // }
-        FishingTackleShopList.forEach(async item => {
-            await FishingTackleShopModel.create({
-                placesId:item.id,
-                address:item.formattedAddress,
-                googleMapsUri:item.googleMapsUri,
-                name:item.displayName.text,
-                phone:item.nationalPhoneNumber,
-                locations:{
-                    type: "Point",
-                    coordinates: [
-                        item.longitude,
-                        item.latitude
-                    ],
-                },
-            })
-        })
+            
+            
+        function createFishingTackleShop () {
+            let qty = 0
 
-        res.send({
-            status: true,
-            result
-        });
-        
+            FishingTackleShopList.forEach(async item => {
+                qty++
+                await FishingTackleShopModel.create({
+                    placesId:item.id,
+                    address:item.formattedAddress,
+                    googleMapsUri:item.googleMapsUri,
+                    name:item.displayName.text,
+                    phone:item.nationalPhoneNumber,
+                    locations:{
+                        type: "Point",
+                        coordinates: [
+                            item.location.longitude,
+                            item.location.latitude
+                        ],
+                    },
+                })
+            })
+
+            res.send({
+                status: true,
+                message:`新增${qty}筆資料`
+            });
+        }
+
+        await createFishingTackleShop ()
+
+        // res.send({
+        //     status: true,
+        //     message:`新增${qty}筆資料`
+        // });
+
 
     } catch (error) {
         next(error);
@@ -96,7 +90,7 @@ const getFishingTackleShopFromGoogle = async (_req, res, next) => {
     
 }
 
-const getFishingTackleShop = async (req, res, next) => {
+const getFishingTackleShopList = async (req, res, next) => {
 
     try {
         const result = await FishingTackleShopModel.find({
@@ -230,4 +224,14 @@ const deleteFishingTackleShopById = async (req, res, next) => {
         } catch (error) {
             next(error);
         }
+}
+
+
+module.exports = {
+    getFishingTackleShopFromGoogle,
+    getFishingTackleShopList,
+    getFishingTackleShopById,
+    createOneFishingTackleShop,
+    updateFishingTackleShopById,
+    deleteFishingTackleShopById
 }

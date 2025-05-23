@@ -3,6 +3,7 @@ const router = express.Router();
 const usersRouter = require('./users');
 const speciesRouter = require('./species');
 const fishingSpotRouter = require('./fishingSpot')
+const fishingTackleShopRouter = require('./fishingTackleShop');
 const admin = require('./admin/index')
 
 /* GET home page. */
@@ -29,6 +30,11 @@ router.use(
 router.use(
   '/api/v1/fishingSpot',
   fishingSpotRouter
+);
+
+router.use(
+  '/api/v1/fishingTackleShop',
+  fishingTackleShopRouter
 );
 
 router.use(

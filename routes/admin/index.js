@@ -5,6 +5,7 @@ const { isAdmin } = require('../../middlewares');
 const fishingSpotRouter = require('./fishingSpot');
 const reviewRouter = require('./review');
 const speciesRouter = require('./species');
+const fishingTackleShopRouter = require('./fishingTackleShop');
 
 
 router.use(isAdmin);
@@ -22,6 +23,11 @@ router.use(
 router.use(
     '/species',
     speciesRouter
+);
+
+router.use(
+    '/fishingTackleShop',
+    fishingTackleShopRouter
 );
 
 
