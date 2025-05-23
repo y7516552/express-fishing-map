@@ -22,9 +22,8 @@ const fishingTackleShopSchema = new Schema(
             type: String,
             required: [true, 'name 未填寫']
         },
-        description: {
+        phone: {
             type: String,
-            required: [true, 'description 未填寫']
         },
         imageUrl: {
             type: String,

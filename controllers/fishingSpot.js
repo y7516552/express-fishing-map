@@ -84,7 +84,8 @@ const createOneFishingSpot = async (req, res, next) => {
             imageUrlList,
             type,
             fishingAllowed,
-            locations
+            locations,
+            city
         } = req.body;
 
         const result = await FishingSpotModel.create({
@@ -95,7 +96,8 @@ const createOneFishingSpot = async (req, res, next) => {
             type,
             fishingAllowed,
             authorId: req.user?._id,
-            locations
+            locations,
+            city
         });
 
         // await result.populate({
@@ -120,7 +122,8 @@ const updateFishingSpotById = async (req, res, next) => {
             imageUrlList,
             type,
             fishingAllowed,
-            locations
+            locations,
+            city
         } = req.body;
 
         const result = await FishingSpotModel.findOneAndUpdate(
@@ -134,7 +137,8 @@ const updateFishingSpotById = async (req, res, next) => {
                 imageUrlList,
                 type,
                 fishingAllowed,
-                locations
+                locations,
+                city
             },
             {
                 new: true,

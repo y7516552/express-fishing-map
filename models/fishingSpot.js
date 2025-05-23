@@ -23,28 +23,6 @@ const fishingSpotSchema = new Schema(
             type: String,
             required: [true, 'description 未填寫']
         },
-        imageUrl: {
-            type: String,
-            required: [true, 'imageUrl 未填寫'],
-            validate: {
-                validator(value) {
-                    return validator.isURL(value, { protocols: ['https'] });
-                },
-                message: 'imageUrl 格式不正確'
-            }
-        },
-        imageUrlList: [
-            {
-                type: String,
-                trim: true,
-                validate: {
-                    validator(value) {
-                        return validator.isURL(value, { protocols: ['https'] });
-                    },
-                    message: 'imageUrlList 格式不正確'
-                }
-            }
-        ],
         status: {
             type: Number,
             default: 1
@@ -70,7 +48,12 @@ const fishingSpotSchema = new Schema(
             type: Number,
             default: 0
         },
-        locations: locationSchema // Array field containing objects with name and coordinates
+        locations: locationSchema, // Array field containing objects with name and coordinates
+        city:{
+            type: String,
+            enum: ["基隆市", "臺北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣", "臺中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "基隆市", "臺南市", "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣"],
+            required : [true, 'city 未填寫']
+        }
     },
     {
         versionKey: false,
