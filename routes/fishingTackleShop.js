@@ -9,7 +9,7 @@ router.get(
 );
 
 router.get(
-    '/googleMap',
+    '/googleMap/:city',
     FishingTackleShopController.getFishingTackleShopFromGoogle
 );
 

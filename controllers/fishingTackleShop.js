@@ -38,16 +38,28 @@ async function fetchGoogleMap(textQuery,nextPageToken=''){
 const getFishingTackleShopFromGoogle = async (_req, res, next) => {
 
     try {
-            const textQuery ="台中 釣具店"
-            let FishingTackleShopList = []
+        const city = _req.params.city
+        const cityList = ["基隆市", "臺北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣", "臺中市", "彰化縣", "南投縣", "雲林縣", "嘉義市", "嘉義縣", "臺南市", "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "臺東縣", "澎湖縣"]
+        if(!city) {
+            throw createHttpError(404, '請輸入城市');
+        }
+        if(!cityList.includes(city)){
+            throw createHttpError(404, '輸入格式錯誤');
+        }
+        const textQuery =`${city} 釣具店`
+        let FishingTackleShopList = []
             
-            for(let i = 0; i < 3; i++){
-                let PageToken = ''
-                const data = await fetchGoogleMap(textQuery,PageToken)
-                FishingTackleShopList=[...FishingTackleShopList,...data.places]
-                if(data.nextPageToken) PageToken = data.nextPageToken
-            }
-            
+        let PageToken = ''
+        for(let i = 0; i < 3; i++){
+            const data = await fetchGoogleMap(textQuery,PageToken)
+            FishingTackleShopList=[...FishingTackleShopList,...data.places]
+            if(data.nextPageToken) PageToken = data.nextPageToken
+        }
+
+        function removeDuplicates(arr) {
+            return [...new Set(arr)];
+        }
+        removeDuplicates(FishingTackleShopList)  
             
         function createFishingTackleShop () {
             let qty = 0
@@ -67,6 +79,7 @@ const getFishingTackleShopFromGoogle = async (_req, res, next) => {
                             item.location.latitude
                         ],
                     },
+                    city:city
                 })
             })
 
@@ -78,11 +91,7 @@ const getFishingTackleShopFromGoogle = async (_req, res, next) => {
 
         await createFishingTackleShop ()
 
-        // res.send({
-        //     status: true,
-        //     message:`新增${qty}筆資料`
-        // });
-
+        
 
     } catch (error) {
         next(error);
