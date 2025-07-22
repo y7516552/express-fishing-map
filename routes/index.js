@@ -4,6 +4,7 @@ const usersRouter = require('./users');
 const speciesRouter = require('./species');
 const fishingSpotRouter = require('./fishingSpot')
 const fishingTackleShopRouter = require('./fishingTackleShop');
+const reportRouter = require('./report')
 const admin = require('./admin/index')
 
 /* GET home page. */
@@ -35,6 +36,11 @@ router.use(
 router.use(
   '/api/v1/fishingTackleShop',
   fishingTackleShopRouter
+);
+
+router.use(
+  '/api/v1/report',
+  reportRouter
 );
 
 router.use(

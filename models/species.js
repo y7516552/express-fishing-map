@@ -20,6 +20,12 @@ const speciesSchema = new Schema({
             message: 'imageUrl 格式不正確'
         }
     },
+    tags: [
+        {
+            type: String,
+            trim: true,
+        }
+    ],
     fishDBUrl: {
         type: String,
         required: [true, 'fishDBUrl 未填寫'],

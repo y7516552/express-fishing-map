@@ -1,35 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const ReportController = require("../controllers/report");
-const { isAuth } = require('../middlewares/index')
+const ReportController = require("../../controllers/report");
 
 router.get(
     '/',
-    isAuth,
-    ReportController.getUserReportList
+    ReportController.getAllReportList
 );
 
 router.post(
     '/',
-    isAuth,
     ReportController.createOneReport
 );
 
 router.get(
     '/:id',
-    isAuth,
     ReportController.getReportById
 );
 
 router.put(
     '/:id',
-    isAuth,
     ReportController.updateReportById
 );
 
 router.delete(
     '/:id',
-    isAuth,
     ReportController.deleteReportById
 );
 

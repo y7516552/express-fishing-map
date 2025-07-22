@@ -1,9 +1,28 @@
 const createHttpError = require('http-errors');
 const ReportModel = require ('../models/report');
 
-const getReportList = async (_req, res, next) => {
+const getAllReportList = async (_req, res, next) => {
     try {
         const result = await ReportModel.find({
+            status: 1
+        }).populate({
+            path: 'userId',
+            select: 'name avatarUrl',
+        });
+
+        res.send({
+            status: true,
+            result
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getUserReportList = async (req, res, next) => {
+    try {
+        const result = await ReportModel.find({
+            userId: req.user?._id,
             status: 1
         }).populate({
             path: 'userId',
@@ -143,7 +162,8 @@ const deleteReportById = async (req, res, next) => {
 
 
 module.exports = {
-    getReportList,
+    getAllReportList,
+    getUserReportList,
     getReportById,
     createOneReport,
     updateReportById,
