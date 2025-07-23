@@ -42,6 +42,7 @@ const createOneSpecies = async (req, res, next) => {
             ScientificName,
             imageUrl,
             fishDBUrl,
+            tags
         } = req.body;
 
         const result = await SpeciesModel.create({
@@ -49,6 +50,7 @@ const createOneSpecies = async (req, res, next) => {
             ScientificName,
             imageUrl,
             fishDBUrl,
+            tags
         });
 
         res.send({
@@ -67,6 +69,7 @@ const updateSpeciesById = async (req, res, next) => {
             ScientificName,
             imageUrl,
             fishDBUrl,
+            tags
         } = req.body;
 
         const result = await SpeciesModel.findByIdAndUpdate(
@@ -76,6 +79,7 @@ const updateSpeciesById = async (req, res, next) => {
                 ScientificName,
                 imageUrl,
                 fishDBUrl,
+                tags
             },
             {
                 new: true,
