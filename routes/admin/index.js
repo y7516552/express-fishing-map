@@ -7,6 +7,7 @@ const reviewRouter = require('./review');
 const speciesRouter = require('./species');
 const fishingTackleShopRouter = require('./fishingTackleShop');
 const reportRouter = require('./report')
+const userRouter = require('./user')
 
 
 router.use(isAdmin);
@@ -34,7 +35,12 @@ router.use(
 router.use(
     '/report',
     reportRouter
-  );
+);
+
+router.use(
+    '/user',
+    userRouter
+);
 
 
 

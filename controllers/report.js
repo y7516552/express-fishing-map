@@ -75,10 +75,7 @@ const createOneReport = async (req, res, next) => {
             description,
             imageUrlList,
             userId: req.user?._id,
-        }).populate({
-            path: 'userId',
-            select: 'name avatarUrl',
-        });
+        })
 
         res.send({
             status: true,

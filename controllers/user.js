@@ -163,6 +163,21 @@ const updateUserPassword = async (req) => {
     return result;
 };
 
+const getUserList = async (req, res) => {
+    try {
+        const result = await UsersModel.find({
+            role: 'user'
+        });
+
+        res.send({
+            status: true,
+            result
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     signup,
     login,
@@ -170,4 +185,5 @@ module.exports = {
     check,
     getInfo,
     updateInfo,
+    getUserList,
   };
