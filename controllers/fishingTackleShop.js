@@ -145,6 +145,7 @@ const createOneFishingTackleShop = async (req, res, next) => {
             name,
             phone,
             locations,
+            city,
         } = req.body;
 
         const result = await FishingTackleShopModel.create({
@@ -155,6 +156,7 @@ const createOneFishingTackleShop = async (req, res, next) => {
             name,
             phone,
             locations,
+            city,
         })
         
 
@@ -177,6 +179,7 @@ const updateFishingTackleShopById = async (req, res, next) => {
             name,
             phone,
             locations,
+            city,
         } = req.body;
 
         const result = await FishingTackleShopModel.findOneAndUpdate(
@@ -191,6 +194,7 @@ const updateFishingTackleShopById = async (req, res, next) => {
                 name,
                 phone,
                 locations,
+                city,
             },
             {
                 new: true,
