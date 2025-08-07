@@ -13,7 +13,7 @@ const userRouter = require('./user')
 router.use(isAdmin);
 
 router.use(
-    '/fishingSpots',
+    '/fishingSpot',
     fishingSpotRouter
 );
 
