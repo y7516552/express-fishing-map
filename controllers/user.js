@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 const createHttpError = require('http-errors');
 const UsersModel = require ('../models/userModel');
 const { generateToken, verifyToken } = require( '../utils/index');
+const {OAuth2Client} = require('google-auth-library');
+
 
 const signup = async (req, res, next) => {
     try {
@@ -178,6 +180,84 @@ const getUserList = async (req, res) => {
     }
 };
 
+const googleLogin = async (req, res, next) => {
+    try {
+        // Google 登入邏輯
+        const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+        const token = req.body.credential
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience:process.env.GOOGLE_CLIENT_ID
+        })
+        const payload = ticket.getPayload()
+        
+        const { email, name, picture,  } = payload;
+
+        const user = await UsersModel.findOne({ email });
+
+
+
+        //login
+        if (user) {
+            const fristLoginCheck = user.providers.some(provider => provider.provider === 'google'&& provider.providerId === payload.sub);
+            if(!fristLoginCheck){
+                // 如果是第一次使用 Google 登入，更新使用者資料
+                const result = await UsersModel.findByIdAndUpdate(
+                    user._id,
+                    {
+                        providers: user.providers.concat({
+                            provider: 'google',
+                            providerId: payload.sub
+                        }),
+                    },
+                    {
+                        new: true,
+                        runValidators: true
+                    }
+                );
+
+                res.send({
+                    status: true,
+                    token: generateToken({ userId: user._id }),
+                    result
+                });
+            }
+
+             res.send({
+                status: true,
+                token: generateToken({ userId: user._id }),
+                result:user
+            });
+
+        }else{
+            //signup
+
+            const _result = await UsersModel.create({
+                name,
+                email,
+                avatarUrl: picture,
+                providers:{
+                    provider: 'google',
+                    providerId: payload.sub
+                }
+            });
+
+            const { ...result } = _result.toObject();
+
+            res.send({
+                status: true,
+                token: generateToken({ userId: result._id }),
+                result
+            });
+
+        }
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 module.exports = {
     signup,
     login,
@@ -186,4 +266,5 @@ module.exports = {
     getInfo,
     updateInfo,
     getUserList,
+    googleLogin
   };

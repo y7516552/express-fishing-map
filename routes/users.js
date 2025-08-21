@@ -43,4 +43,9 @@ router.put(
   UserController.updateInfo
 );
 
+router.post(
+  '/google/verify-token',
+  UserController.googleLogin
+)
+
 module.exports = router;

@@ -26,12 +26,13 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: [true, 'password 未填寫'],
+    required: false,
+    // required: [true, 'password 未填寫'],
     select: false
   },
   phone: {
     type: String,
-    required: [true, 'phone 未填寫']
+    // required: [true, 'phone 未填寫']
   },
   verificationToken: {
     type: String,
@@ -51,7 +52,14 @@ const UserSchema = new Schema({
         },
         message: 'avatarUrl 格式不正確'
     }
-  }
+  },
+  // OAuth 登入方式
+    providers: [
+      {
+        provider: { type: String }, // 'google', 'facebook', 'github'...
+        providerId: { type: String }, // 各平台唯一ID
+      },
+    ],
 });
 
 const UserModel = model("Users", UserSchema);
