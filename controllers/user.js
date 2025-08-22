@@ -199,8 +199,8 @@ const googleLogin = async (req, res, next) => {
 
         //login
         if (user) {
-            const fristLoginCheck = user.providers.some(provider => provider.provider === 'google'&& provider.providerId === payload.sub);
-            if(!fristLoginCheck){
+            const exists = user.providers.some(provider => provider.provider === 'google'&& provider.providerId === payload.sub);
+            if(!exists){
                 // 如果是第一次使用 Google 登入，更新使用者資料
                 const result = await UsersModel.findByIdAndUpdate(
                     user._id,
